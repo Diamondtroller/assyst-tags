@@ -1,0 +1,39 @@
+name: Build Assyst tags
+
+on: push
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+      - name: Build static files
+        id: build
+        run: |
+          npm ci
+          mkdir -p out
+          npx esbuild --minify --outdir=out src/*/*.js 
+          mv out/*/*.js out/
+          rmdir out/*/
+          for tag in out/*.js; do echo "{js:const args='{args}';{ignore:$(<$tag)}}">$tag; done
+
+      - name: Upload static files as artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out/
+
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
