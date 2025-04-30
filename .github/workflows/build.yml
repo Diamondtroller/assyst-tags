@@ -10,8 +10,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@v4
-      - name: Build static files
+      - name: Checkoout repository
+        uses: actions/checkout@v4
+      - name: Setup node
+        uses: actions/setup-node@v4
+      - name: Minify and put tag files
         id: build
         run: |
           npm ci
