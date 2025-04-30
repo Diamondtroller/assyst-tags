@@ -18,10 +18,7 @@ jobs:
         id: build
         run: |
           npm ci
-          mkdir -p out
-          npx esbuild --minify --outdir=out src/*/*.js 
-          mv out/*/*.js out/
-          rmdir out/*/
+          npm run build
           for tag in out/*.js; do echo "{js:const args='{args}';{ignore:$(<$tag)}}">$tag; done
 
       - name: Upload static files as artifact

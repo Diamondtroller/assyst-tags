@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "esbuild": "^0.25.3"
+  },
+  "scripts": {
+    "build": "npx esbuild --minify --outdir=out --entry-names=[name] src/*/*.js"
   }
 }
