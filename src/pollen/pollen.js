@@ -4,15 +4,26 @@
   if (!argsL) {
     return "Format for pollen tag is `-t pollen <species> <country> [[-]NUMh]`";
   }
-
+  
   const species = (argsL.match(/(alder|birch|grass|mugwort|olive|ragw)/g) ?? [])[0];
   if (!species) {
     return "Please provide pollen to look for `-t pollen <alder|birch|grass|mugwort|olive|ragw>`";
   }
-  const country = (argsL.match(/(latvia|denmark|poland)/g) ?? [])[0];
+  let country = (argsL.match(/(latvia|denmark|poland)/g) ?? [])[0];
+  const country_short = (argsL.match(/(lv|dk|pl)/g) ?? [])[0];
+
+  if (country_short){
+    country = {
+      lv: 'latvia',
+      dk: 'denmark',
+      pl: 'poland'
+    }[country_short]
+  }
+  
   if (!country) {
     return "Please provide country to look for `-t pollen <denmark|latvia|poland>`";
   }
+  
   const map = {
     latvia: { map: 'ne', x: 700, y: 750, },
     denmark: { map: 'nw', x: 1225, y: 325, },
