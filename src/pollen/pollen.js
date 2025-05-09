@@ -15,20 +15,21 @@
     dk: ['dk', 'denmark', 'danmark'],
     pl: ['pl', 'poland', 'polska']
   };
-  const country = (new RegExp(
-    `(${Object.entries(countries)
-      .map(([country, strings]) => `(?<${country}>)(${strings.join('|')})`)
-      .join('|')})`, "g"
-  ).exec(argsL).groups ?? [])[0];
+
+  const country = new Map(
+    Object.entries(countries)
+      .map(([country, names]) => names.map((s) => [s, country]))
+      .flat()
+  ).get((argsL.match(Object.values(countries).flat().join('|')) ?? [null])[0]);
 
   if (!country) {
     return `Please provide country to look for \`-t pollen <${Object.values(countries).flat().join('|')}>\``;
   }
 
   const map = {
-    latvia: { map: 'ne', x: 700, y: 750, },
-    denmark: { map: 'nw', x: 1225, y: 325, },
-    poland: { map: 'central', x: 1050, y: 350 }
+    lv: { map: 'ne', x: 700, y: 750 },
+    dk: { map: 'nw', x: 1225, y: 325 },
+    pl: { map: 'central', x: 1050, y: 350 }
   }[country];
 
 
