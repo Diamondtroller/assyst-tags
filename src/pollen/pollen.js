@@ -5,7 +5,7 @@
     return "Format for pollen tag is `-t pollen <species> <country> [[-]NUMh]`";
   }
 
-  const species = (argsL.match(/(alder|birch|grass|mugwort|olive|ragw)/g) ?? [])[0];
+  const species = (argsL.match(/\b(alder|birch|grass|mugwort|olive|ragw)\b/g) ?? [])[0];
   if (!species) {
     return "Please provide pollen to look for `-t pollen <alder|birch|grass|mugwort|olive|ragw>`";
   }
@@ -20,7 +20,7 @@
     Object.entries(countries)
       .map(([country, names]) => names.map((s) => [s, country]))
       .flat()
-  ).get((argsL.match(Object.values(countries).flat().join('|')) ?? [null])[0]);
+  ).get((argsL.match(`\\b(?:${Object.values(countries).flat().join('|')})\\b`) ?? [null])[0]);
 
   if (!country) {
     return `Please provide country to look for \`-t pollen <${Object.values(countries).flat().join('|')}>\``;
